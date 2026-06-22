@@ -14,6 +14,7 @@ Currently, the following potentiostats are included in the library:
 * CHI1242B from CH Instruments (chi1242b)
 * CHI601E from CH Instruments (chi601e)
 * CHI760E from CH Instruments (chi760e)
+* CHI760F from CH Instruments (chi760f)
 * Emstat Pico from PalmSens (emstatpico)
 
 with the following techniques:
@@ -22,8 +23,8 @@ with the following techniques:
 * Linear sweep voltammetry, LSV
 * Open circuit potential, OCP
 
-For the CHI601E and CHI760E only:
-* Normal pulse voltammetry, NPV
+For the CHI601E and CHI760E/F only:
+* Normal pulse voltammetry (NPV), Pulsed chronoamperometry (PCA), and bulk electrolysis (BE)
 
 # Installation
 Open a console and type:
@@ -38,7 +39,7 @@ Here are quick examples on how to use the library. For more help check the [Wiki
 import hardpotato as hp
 
 # Potentiostat setup
-# Choose the correct model from ['chi760e', 'chi1205b', 'emstatpico']:
+# Choose the correct model from ['chi760f','chi760e', 'chi1205b', 'emstatpico']:
 model = 'chi760e' 
 # Write the path where the chi software is installed (this line is optional when
 # using the Pico). Make sure to use / instead of \:
@@ -108,3 +109,6 @@ Hard Potato was developed at the [Beckman Institute](https://beckman.illinois.ed
 * Lead: Oliver Rodriguez ([oliverrdz.xyz](https://oliverrdz.xyz), oliver.rdz@softpotato.xyz)
 * Support: Michael Pence (mapence2@illinois.edu)
 * PI: Joaquin Rodriguez-Lopez (joaquinr@illinois.edu)
+
+# Update
+Last updated by Zirui Wang (ziruiw2@illinois.edu), June 2026

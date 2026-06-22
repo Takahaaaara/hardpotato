@@ -2,7 +2,7 @@ class Test:
     '''
     '''
     def __init__(self):
-        print('Test from chi760e translator')
+        print('Test from chi760f translator')
 
 class Info:
     '''
@@ -36,7 +36,7 @@ class Info:
                             '. Received ' + str(val) + ' ' + units)
 
     def specifications(self):
-        print('Model: CH Instruments 760E (chi760e)')
+        print('Model: CH Instruments 760F (chi760f)')
         print('Techiques available:', self.tech)
         print('Options available:', self.options)
 
@@ -192,7 +192,7 @@ class NPV():
 
         self.validate(Eini, Efin, dE, tsample, twidth, tperiod, sens)
 
-        self.head = 'C\x02\0\0\nfolder: ' + folder + '\n' + '\nfileoverride\n' + \
+        self.head = 'C\x02\0\0\nfolder: ' + folder + '\n' + fileOverride + \
                     'header: ' + header + '\n\n'
         self.body = 'tech=NPV\nei=' + str(Eini) + '\nef=' + str(Efin) + \
                     '\nincre=' + str(dE) + '\npw=' + str(tsample) + \
@@ -396,7 +396,6 @@ class BE:
         info = Info()
         info.limits(Estep, info.E_min, info.E_max, 'Estep', 'V')
         #info.limits(ttot, info.ttot_min, info.ttot_max, 'ttot', 's')
-
 
 class EIS:
     '''
