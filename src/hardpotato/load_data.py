@@ -140,3 +140,45 @@ class BE(Read):
         if model[0:3] == 'chi':
             self.t = self.x
             self.Q = self.y[:, 0]
+
+class PSC(Read):
+    '''
+    '''
+    def __init__(self, fileName='file', folder='.', model=0):
+        self.fileName = fileName
+        self.folder = folder
+        text = 'Distance/um,'
+        Read.__init__(self)
+        self.read(text, model)
+        if model == 'chi920d':
+            self.d = self.x
+            self.i = self.y
+
+class PAC(Read):
+    '''
+    '''
+    def __init__(self, fileName='file', folder='.', model=0):
+        self.fileName = fileName
+        self.folder = folder
+        text = 'Distance/um,'
+        Read.__init__(self)
+        self.read(text, model)
+        if model == 'chi920d':
+            self.d = self.x
+            self.i = self.y
+
+class SECM(Read):
+    '''
+    '''
+    def __init__(self, fileName='file', folder='.', skiprows=0, delimiter=',',
+                 model=0): 
+        self.fileName = fileName
+        self.folder = folder
+        Read.__init__(self)
+        self.skiprows = skiprows
+        self.delimiter = delimiter
+        self.data = np.loadtxt(self.file_path, delimiter=self.delimiter, 
+                    skiprows=self.skiprows)
+        self.x = self.data[:,0]
+        self.y = self.data[:,1:]
+        self.i = self.data[:,2:]

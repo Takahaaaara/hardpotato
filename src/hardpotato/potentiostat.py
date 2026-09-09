@@ -8,6 +8,7 @@ import hardpotato.load_data as load_data
 import hardpotato.save_data as save_data
 import hardpotato.chi760f as chi760f
 import hardpotato.chi760e as chi760e
+import hardpotato.chi920d as chi920d
 import hardpotato.chi1205b as chi1205b
 import hardpotato.chi601e as chi601e
 import hardpotato.chi1242b as chi1242b
@@ -48,6 +49,8 @@ class Info:
             self.info = chi760f.Info()
         elif self.model == 'chi760e':
             self.info = chi760e.Info()
+        elif self.model == 'chi920d':
+            self.info = chi920d.Info()
         elif self.model == 'emstatpico':
             self.info = emstatpico.Info()
         else:
@@ -431,7 +434,60 @@ class EIS(Technique):
         else:
             print('Potentiostat model ' + model_pstat + ' does not have EIS.')
 
+class SECM(Technique):
+    '''
+    '''
+    def __init__(self):
+        self.model = model_pstat
+        self.folder = folder_save
+        self.fileName = '' 
+        self.header = ''
+        
 
+    def MOVE(self, motor='step', x=0, y=0, z=0):
+        self.moveText = ''
+        if self.model == 'chi920d':
+            self.moveText += chi920d.SECM.MOVE(self, motor, x, y, z)
+
+    def CV(self, Eini=-0.2, Ev1=0.2, Ev2=-0.2, Efin=-0.2, sr=0.1,
+                 dE=0.001, nSweeps=2, sens=1e-6,
+                 fileName='CV', header='CV', **kwargs):
+        self.techText = ''
+        if self.model == 'chi920d':
+            self.techText = chi920d.SECM.CV(self, Eini, Ev1, Ev2, Efin, sr, dE, nSweeps, sens, fileName, **kwargs)
+
+    def PSC(self, E1=0.2, dist=100, sens=1e-9, incrdist=0.05, incrtime=0.05,
+            fileName='PSC', header='PSC', **kwargs):
+        self.techText = ''
+        if self.model == 'chi920d':
+            self.techText = chi920d.SECM.PSC(self, E1, dist, sens, incrdist, incrtime, fileName, **kwargs)
+
+    def PAC(self, E1=0.2, iratio=75, sens=1e-9,
+            fileName='PAC', header='PAC', **kwargs):
+        self.techText = ''
+        if self.model == 'chi920d':
+            self.techText = chi920d.SECM.PAC(self, E1, iratio, sens, fileName, **kwargs)
+
+    def SECM(self, secmmode='i', E1=0.1, sens=1e-9, xdist=10, ydist=10, incrdist=0.05, incrtime=0.05,
+             fileName='SECM', header='SECM', **kwargs):
+        self.techText = ''
+        if self.model == 'chi920d':
+            self.techText = chi920d.SECM.SECM(self, secmmode, E1, sens, xdist, ydist, incrdist, incrtime, fileName, **kwargs)
+    
+    def RUN(self):
+        head = 'c\x02\0\0\nfolder: ' + folder_save + '\nfileoverride\n' + \
+                    'header: ' + self.header + '\n\n'
+        body = self.moveText + self.techText
+        foot = '\n forcequit: yesiamsure\n'
+        text = head + body + foot 
+        file = open(folder_save + '/' + self.fileName + '.mcr', 'wb')
+        file.write(text.encode('ascii'))
+        file.close()
+
+        self.moveText = '' 
+        self.techText = ''
+
+    
 
 if __name__ == '__main__':
     sens = 1e-8

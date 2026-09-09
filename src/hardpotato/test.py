@@ -1,6 +1,6 @@
 import potentiostat
 
-model = 'chi1205b'
+model = 'chi920d'
 path = '.'
 folder = 'data'
 
@@ -10,18 +10,37 @@ info.specifications()
 
 
 potentiostat.Setup(model, path, folder)
-
-cv = potentiostat.LSV(Eini=1)
+secm = potentiostat.SECM()
+stepx = 1
+stepy = 5
+sizex= 3
+sizey= 15
+currentx = 0
+currenty = 0
+for x in range (0,sizex,stepx):
+    for y in range (0, sizey, stepy):
+        dx = x - currentx
+        currentx = x
+        dy = y - currenty
+        currenty = y
+        pacFileName = f'PAC_x{x}_y{y}'
+        secm.MOVE('step', x=dx, y=dy, z=-150)
+        # secm.CV(sr=0.5)
+        secm.PAC(E2=-0.4, sens2=0.3, resistance=100, fileName=pacFileName)
+        secm.RUN()
+        cvFileName = f'CV_x{x}_y{y}'
+        secm.CV(fileName=cvFileName)
+        secm.RUN()
 #cv.bipot()
-#cv.run()
 
-#lsv = potentiostat.LSV(sr=0.5)
-#lsv.bipot()
-#lsv.run()
 
-#ca = potentiostat.CA()
-#ca.bipot()
-#ca.run()
+# lsv = potentiostat.LSV(sr=0.5)
+# lsv.bipot()
+# lsv.run()
+
+# ca = potentiostat.CA()
+# ca.bipot()
+# ca.run()
 
 #ocp = potentiostat.OCP()
 #ocp.run()
