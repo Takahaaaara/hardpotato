@@ -357,7 +357,7 @@ class SECM:
         text = self.body + runTurnOffSave
         return text
 
-    def PAC(self, E1, iratio, sens,
+    def PAC(self, E1, iratio, sens, maxincr,
             fileName, **kwargs):
         self.fileName = fileName
         text = ''
@@ -365,8 +365,8 @@ class SECM:
             qt = kwargs.get('qt')
         else:
             qt = 2
-        self.body = 'tech=pac\nei=' + str(E1) + '\niratio' + str(iratio) + '\nsens=' + \
-            str(sens) + '\nqt=' + str(qt)
+        self.body = 'tech=pac\nei=' + str(E1) + '\niratio=' + str(iratio) + '\nsens=' + \
+            str(sens) + '\nmaxincr=' + str(maxincr) + '\nqt=' + str(qt)
         if 'resistance' in kwargs: # In case IR compensation is required
             resistance = kwargs.get('resistance')
             self.body += '\nmir=' + str(resistance) + \

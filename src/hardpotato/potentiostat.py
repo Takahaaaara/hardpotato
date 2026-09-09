@@ -442,6 +442,8 @@ class SECM(Technique):
         self.folder = folder_save
         self.fileName = '' 
         self.header = ''
+        self.moveText = ''
+        self.techText = ''
         
 
     def MOVE(self, motor='step', x=0, y=0, z=0):
@@ -462,11 +464,11 @@ class SECM(Technique):
         if self.model == 'chi920d':
             self.techText = chi920d.SECM.PSC(self, E1, dist, sens, incrdist, incrtime, fileName, **kwargs)
 
-    def PAC(self, E1=0.2, iratio=75, sens=1e-9,
-            fileName='PAC', header='PAC', **kwargs):
+    def PAC(self, E1=0.2, iratio=75, sens=1e-9, maxincr=1,
+            fileName='PAC', **kwargs):
         self.techText = ''
         if self.model == 'chi920d':
-            self.techText = chi920d.SECM.PAC(self, E1, iratio, sens, fileName, **kwargs)
+            self.techText = chi920d.SECM.PAC(self, E1, iratio, sens, maxincr, fileName, **kwargs)
 
     def SECM(self, secmmode='i', E1=0.1, sens=1e-9, xdist=10, ydist=10, incrdist=0.05, incrtime=0.05,
              fileName='SECM', header='SECM', **kwargs):
@@ -483,6 +485,13 @@ class SECM(Technique):
         file = open(folder_save + '/' + self.fileName + '.mcr', 'wb')
         file.write(text.encode('ascii'))
         file.close()
+
+        print('Running CV')
+        command = [
+         path_lib,
+         f'/runmacro:{folder_save}/{self.fileName}.mcr'
+        ]
+        subprocess.run(command)
 
         self.moveText = '' 
         self.techText = ''
