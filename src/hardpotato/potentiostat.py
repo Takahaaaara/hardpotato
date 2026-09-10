@@ -19,7 +19,7 @@ import hardpotato.pico_mscript as mscript
 import hardpotato.pico_serial as serial
 
 # Potentiostat models available: 
-models_available = ['chi1205b', 'chi1242b', 'chi601e', 'chi760f', 'chi760e', 'emstatpico']
+models_available = ['chi1205b', 'chi1242b', 'chi601e', 'chi760f', 'chi760e', 'chi920d',  'emstatpico']
 
 # Global variables
 folder_save = '.'
@@ -445,7 +445,6 @@ class SECM(Technique):
         self.moveText = ''
         self.techText = ''
         
-
     def MOVE(self, motor='step', x=0, y=0, z=0):
         self.moveText = ''
         if self.model == 'chi920d':
@@ -464,11 +463,11 @@ class SECM(Technique):
         if self.model == 'chi920d':
             self.techText = chi920d.SECM.PSC(self, E1, dist, sens, incrdist, incrtime, fileName, **kwargs)
 
-    def PAC(self, E1=0.2, iratio=75, sens=1e-9, maxincr=1,
+    def PAC(self, E1=0.2, iratio=75, sens=1e-9, maxincr=1, withdraw=0,
             fileName='PAC', **kwargs):
         self.techText = ''
         if self.model == 'chi920d':
-            self.techText = chi920d.SECM.PAC(self, E1, iratio, sens, maxincr, fileName, **kwargs)
+            self.techText = chi920d.SECM.PAC(self, E1, iratio, sens, maxincr, withdraw, fileName, **kwargs)
 
     def SECM(self, secmmode='i', E1=0.1, sens=1e-9, xdist=10, ydist=10, incrdist=0.05, incrtime=0.05,
              fileName='SECM', header='SECM', **kwargs):
@@ -491,7 +490,7 @@ class SECM(Technique):
          path_lib,
          f'/runmacro:{folder_save}/{self.fileName}.mcr'
         ]
-        subprocess.run(command)
+        #subprocess.run(command)
 
         self.moveText = '' 
         self.techText = ''

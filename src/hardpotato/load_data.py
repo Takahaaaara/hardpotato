@@ -50,7 +50,6 @@ class Read:
         return 0
 
 
-
 class XY(Read):
     '''
     '''

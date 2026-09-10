@@ -8,11 +8,24 @@ folder = 'data'
 info = potentiostat.Info(model)
 info.specifications()
 
+Eini = -0.5     # V, initial potential
+Ev1 = 0.5       # V, first vertex potential
+Ev2 = -0.5      # V, second vertex potential
+Efin = -0.5     # V, final potential
+sr = 0.1        # V/s, scan rate
+dE = 0.001      # V, potential increment
+nSweeps = 2     # number of sweeps
+sens = 1e-4     # A/V, current sensitivity
+e2 = 0.0        # V, potential of the second working electrode
+sens2 = 1e-9    # A/V, current sensitivity of the second working electrode
+fileName = 'CV' # base file name for data file
+header = 'CV'   # header for data file
 
 potentiostat.Setup(model, path, folder)
 secm = potentiostat.SECM()
-secm.MOVE('step', z=-150)
-secm.PAC(E1=0.4, qt = 30, sens=1e-9)
+# secm.MOVE('step', z=-150)
+secm.CV(Eini, Ev1,Ev2, Efin, sr, dE, nSweeps, sens, fileName, header, E2=e2, sens2=sens2)
+# secm.PAC(E1=0.4, qt = 30, sens=1e-9, maxincr=0.5, iratio=80, fileName='10092026_PAC_before_tests')
 secm.RUN()
 # stepx = 1
 # stepy = 5
