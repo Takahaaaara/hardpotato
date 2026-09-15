@@ -10,7 +10,7 @@ info.specifications()
 
 potentiostat.Setup(model, path, folder)
 secm = potentiostat.SECM()
-secm.SECM(E1=0.4, qt = 30, sens=1e-8, xdist=-200, ydist=-200,
+secm.SECM(E1=0.4, qt = 30, sens=1e-9, xdist=-50, ydist=-50,
           incrtime=0.05, incrdist=5,
            fileName='SECM', header='SECM_test')
 secm.RUN()

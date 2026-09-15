@@ -322,13 +322,12 @@ class SECM:
             self.body += '\ne2=' + str(E2) + '\nsens2=' + str(sens2) + \
                          '\ne2on\ni2on'
         else:
-            self.body += '\nrun\nsave:' + self.fileName + \
-                         '\ntsave:' + self.fileName 
+            pass
         runTurnOffSave = '\nrun\ne2off\ni2off\nircompoff\nsave:' + self.fileName + '\ntsave:' + self.fileName
         text = self.body + runTurnOffSave
         return text
     
-    def PSC(self, E1, dist, sens, incrdist, incrtime,
+    def PSC(self, E1, dir, dist, sens, incrdist, incrtime,
             fileName, **kwargs):
         self.fileName = fileName
         text = ''
@@ -336,7 +335,7 @@ class SECM:
             qt = kwargs.get('qt')
         else:
             qt = 2
-        self.body = 'tech=psc\nei=' + str(E1) + '\ndist=' + str(dist) + '\nsens=' + \
+        self.body = 'tech=psc\nei=' + str(E1) + '\ndir=' + str(dir) + '\ndist=' + str(dist) + '\nsens=' + \
             str(sens) + '\nincrdist=' + str(incrdist) + '\nincrtime=' + str(incrtime) + \
             '\nqt=' + str(qt)
         if 'resistance' in kwargs: # In case IR compensation is required
@@ -349,8 +348,7 @@ class SECM:
             self.body += '\ne2=' + str(E2) + '\nsens2=' + str(sens2) + \
                          '\ne2on\ni2on'
         else:
-            self.body += '\nrun\nsave:' + self.fileName + \
-                         '\ntsave:' + self.fileName 
+            pass
         runTurnOffSave = '\nrun\ne2off\ni2off\nircompoff\nsave:' + self.fileName + '\ntsave:' + self.fileName
         text = self.body + runTurnOffSave
         return text
@@ -375,8 +373,7 @@ class SECM:
             self.body += '\ne2=' + str(E2) + '\nsens2=' + str(sens2) + \
                          '\ne2on\ni2on'
         else:
-            self.body += '\nrun\nsave:' + self.fileName + \
-                         '\ntsave:' + self.fileName 
+            pass
         runTurnOffSave = '\nrun\ne2off\ni2off\nircompoff\nsave:' + self.fileName + '\ntsave:' + self.fileName
         text = self.body + runTurnOffSave
         return text

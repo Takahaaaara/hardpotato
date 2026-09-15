@@ -200,11 +200,16 @@ class SECM(Read):
     def __init__(self, fileName="file", folder=".", model=0):
         self.fileName = fileName
         self.folder = folder
-        text = "X/um,"
+        text = 'X/um'
         Read.__init__(self)
-        self.read(text, model)
-        if model == "chi920d":
-            self.x = self.x
-            self.y = self.y
-            self.i = self.z
+        self.delimiter = ","
+        self.skiprows = self.search(text) + 1 # for some reason the chi software add a ' ' (space) between the header and data in SECN mode
+        if self.skiprows:
+            self.data = np.loadtxt(
+                self.file_path, delimiter=self.delimiter, skiprows=self.skiprows
+                )
+        self.x = self.data[:, 0]
+        self.y = self.data[:, 1]
+        self.z = self.data[:, 2:]
+
 

@@ -510,11 +510,11 @@ class SECM(Technique):
             self.techText = chi920d.SECM.CV(self, Eini, Ev1, Ev2, Efin, sr, dE, nSweeps, sens, fileName, **kwargs)
             self.technique = 'CV'
 
-    def PSC(self, E1=0.2, dist=100, sens=1e-9, incrdist=0.05, incrtime=0.05,
+    def PSC(self, E1=0.2, dir='x', dist=100, sens=1e-9, incrdist=0.05, incrtime=0.05,
             fileName='PSC', header='PSC', **kwargs):
         self.techText = ''
         if self.model == 'chi920d':
-            self.techText = chi920d.SECM.PSC(self, E1, dist, sens, incrdist, incrtime, fileName, **kwargs)
+            self.techText = chi920d.SECM.PSC(self, E1, dir, dist, sens, incrdist, incrtime, fileName, **kwargs)
             self.technique = 'PSC'
 
     def PAC(self, E1=0.2, iratio=75, sens=1e-9, maxincr=1, withdraw=0,
@@ -532,6 +532,7 @@ class SECM(Technique):
             self.technique = 'SECM'
 
     def RUN(self):
+        self.message()
         head = 'c\x02\0\0\nfolder: ' + folder_save + '\nfileoverride\n' + \
                     'header: ' + self.header + '\n\n'
         body = self.moveText + self.techText
@@ -546,10 +547,11 @@ class SECM(Technique):
          path_lib,
          f'/runmacro:{folder_save}/{self.fileName}.mcr'
         ]
-        #subprocess.run(command)
+        subprocess.run(command)
 
         self.moveText = '' 
         self.techText = ''
+        self.message(start=False)
         self.plot()
 
     
