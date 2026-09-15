@@ -92,9 +92,7 @@ class CV:
             self.body2 = self.body + '\nrun\nsave:' + self.fileName + \
                          '\ntsave:' + self.fileName 
         self.foot = '\n forcequit: yesiamsure\n'
-
-        self._applied_moves += _pending_moves
-        self.text = self.head + self._applied_moves + self.body2 + self.foot
+        self.text = self.head + self.body2 + self.foot
 
     def bipot(self, E, sens):
         # Validate bipot:

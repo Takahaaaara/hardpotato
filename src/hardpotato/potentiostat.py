@@ -1,4 +1,3 @@
-import os
 import numpy as np
 import matplotlib.pyplot as plt
 import softpotato as sp
@@ -160,7 +159,39 @@ class Technique:
             sp.plotting.plot(be.t, be.Q, show=False, fig=figNum,
                              xlab='$t$ / s', ylab='$Q$ / C',
                              fileName=folder_save + '/' + self.fileName)
-        plt.close()    
+        elif self.technique == 'PAC':
+            pac = load_data.PAC(self.fileName+'.txt', folder_save, model_pstat)
+            sp.plotting.plot(pac.d, pac.i, show=False, fig=figNum,
+                             xlab='$d$ / um', ylab='$i$ / A',
+                             fileName=folder_save + '/' + self.fileName)
+        elif self.technique == 'PSC':
+            psc = load_data.PSC(self.fileName+'.txt', folder_save, model_pstat)
+            sp.plotting.plot(psc.d, psc.i, show=False, fig=figNum,
+                             xlab='$d$ / um', ylab='$i$ / A',
+                             fileName=folder_save + '/' + self.fileName)
+        elif self.technique == 'SECM':
+            secm = load_data.SECM(self.fileName+'.txt', folder_save, model_pstat)
+            x = secm.x
+            y = secm.y
+            z = secm.z[:, 0]
+            x_unique = np.unique(x)
+            y_unique = np.unique(y)
+            Z = z.reshape(len(y_unique), len(x_unique))
+
+            heatmap = plt.pcolormesh(
+                x_unique,
+                y_unique,
+                Z,
+                cmap='viridis'
+            )
+            plt.xticks(fontsize=14)
+            plt.yticks(fontsize=14)
+            plt.xlabel('$X$ / µm', fontsize=18)
+            plt.ylabel('$Y$ / µm', fontsize=18)
+            plt.tight_layout()
+            plt.colorbar(heatmap, label='$i$ / A')
+            plt.savefig(folder_save + '/' + self.fileName + '.png')
+            plt.close()
          
 
 
@@ -219,6 +250,12 @@ class CV(Technique):
                                **kwargs)
             Technique.__init__(self, text=self.tech.text, fileName=fileName)
             self.technique = 'CV'
+        elif model_pstat == 'chi920d':
+            self.tech = chi920d.CV(Eini, Ev1, Ev2, Efin, sr, dE, nSweeps, sens,
+                               folder_save, fileName, header, path_lib,
+                               **kwargs)
+            Technique.__init__(self, text=self.tech.text, fileName=fileName)
+            self.technique = 'CV'
         elif model_pstat == 'chi1205b':
             self.tech = chi1205b.CV(Eini, Ev1, Ev2, Efin, sr, dE, nSweeps, sens,
                                folder_save, fileName, header, path_lib,
@@ -263,6 +300,11 @@ class LSV(Technique):
                                 header, path_lib, **kwargs)
             Technique.__init__(self, text=self.tech.text, fileName=fileName)
             self.technique = 'LSV'    
+        elif model_pstat == 'chi920d':
+            self.tech = chi920d.LSV(Eini, Efin, sr, dE, sens, folder_save, fileName, 
+                                header, path_lib, **kwargs)
+            Technique.__init__(self, text=self.tech.text, fileName=fileName)
+            self.technique = 'LSV'    
         elif model_pstat == 'chi1205b':
             self.tech = chi1205b.LSV(Eini, Efin, sr, dE, sens, folder_save, fileName, 
                                 header, path_lib, **kwargs)
@@ -304,6 +346,11 @@ class CA(Technique):
                                header, path_lib, **kwargs)
             Technique.__init__(self, text=self.tech.text, fileName=fileName)
             self.technique = 'CA'
+        elif model_pstat == 'chi920d':
+            self.tech = chi920d.CA(Estep, dt, ttot, sens, folder_save, fileName,
+                               header, path_lib, **kwargs)
+            Technique.__init__(self, text=self.tech.text, fileName=fileName)
+            self.technique = 'CA'
         elif model_pstat == 'chi1205b':
             self.tech = chi1205b.CA(Estep, dt, ttot, sens, folder_save, fileName,
                                header, path_lib, **kwargs)
@@ -342,6 +389,11 @@ class OCP(Technique):
             self.technique = 'OCP'
         elif model_pstat == 'chi760f':
             self.tech = chi760f.OCP(ttot, dt, folder_save, fileName, header, 
+                                    path_lib, **kwargs)
+            Technique.__init__(self, text=self.tech.text, fileName=fileName)
+            self.technique = 'OCP'
+        elif model_pstat == 'chi920d':
+            self.tech = chi920d.OCP(ttot, dt, folder_save, fileName, header, 
                                     path_lib, **kwargs)
             Technique.__init__(self, text=self.tech.text, fileName=fileName)
             self.technique = 'OCP'
@@ -456,25 +508,29 @@ class SECM(Technique):
         self.techText = ''
         if self.model == 'chi920d':
             self.techText = chi920d.SECM.CV(self, Eini, Ev1, Ev2, Efin, sr, dE, nSweeps, sens, fileName, **kwargs)
+            self.technique = 'CV'
 
     def PSC(self, E1=0.2, dist=100, sens=1e-9, incrdist=0.05, incrtime=0.05,
             fileName='PSC', header='PSC', **kwargs):
         self.techText = ''
         if self.model == 'chi920d':
             self.techText = chi920d.SECM.PSC(self, E1, dist, sens, incrdist, incrtime, fileName, **kwargs)
+            self.technique = 'PSC'
 
     def PAC(self, E1=0.2, iratio=75, sens=1e-9, maxincr=1, withdraw=0,
             fileName='PAC', **kwargs):
         self.techText = ''
         if self.model == 'chi920d':
             self.techText = chi920d.SECM.PAC(self, E1, iratio, sens, maxincr, withdraw, fileName, **kwargs)
+            self.technique = 'PAC'
 
     def SECM(self, secmmode='i', E1=0.1, sens=1e-9, xdist=10, ydist=10, incrdist=0.05, incrtime=0.05,
              fileName='SECM', header='SECM', **kwargs):
         self.techText = ''
         if self.model == 'chi920d':
             self.techText = chi920d.SECM.SECM(self, secmmode, E1, sens, xdist, ydist, incrdist, incrtime, fileName, **kwargs)
-    
+            self.technique = 'SECM'
+
     def RUN(self):
         head = 'c\x02\0\0\nfolder: ' + folder_save + '\nfileoverride\n' + \
                     'header: ' + self.header + '\n\n'
@@ -494,6 +550,7 @@ class SECM(Technique):
 
         self.moveText = '' 
         self.techText = ''
+        self.plot()
 
     
 

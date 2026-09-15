@@ -1,8 +1,8 @@
 from hardpotato import potentiostat
 
 model = 'chi920d'
-path = r"C:\Users\parasita\Downloads\chi920d\chi920d.exe"
-folder = r'.\data\tests\CV_test'
+path = 'C:/Users/parasita/Downloads/chi920d/chi920d.exe'
+folder = './data/tests/CV_test'
 
 #print(potentiostat.models_available)
 info = potentiostat.Info(model)
