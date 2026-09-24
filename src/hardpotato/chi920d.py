@@ -371,8 +371,6 @@ class SECM:
         else:
             resistance = 0
         
-        self.validate(Eini, Efin, sr, dE, sens)
-
         self.head = 'C\x02\0\0\nfolder: ' + folder + '\nfileoverride\n' + \
                     'header: ' + header + '\n\n'
         self.body = 'tech=lsv\nei=' + str(Eini) + '\nef=' + str(Efin) + \
@@ -394,7 +392,7 @@ class SECM:
         return text
 
     def OCP(self, ttot, dt,
-            fileName, *kwargs):
+            fileName, **kwargs):
         self.fileName = fileName
         if 'qt' in kwargs:
             qt = kwargs.get('qt')
