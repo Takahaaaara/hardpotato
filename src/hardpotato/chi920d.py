@@ -326,6 +326,92 @@ class SECM:
         runTurnOffSave = '\nrun\ne2off\ni2off\nircompoff\nsave:' + self.fileName + '\ntsave:' + self.fileName
         text = self.body + runTurnOffSave
         return text
+
+    def CA(self, Estep, dt, ttot, sens,
+           fileName, **kwargs):
+        self.fileName = fileName
+        if 'qt' in kwargs:
+            qt = kwargs.get('qt')
+        else:
+            qt = 2
+        if 'resistance' in kwargs:
+            resistance = kwargs.get('resistance')
+        else:
+            resistance = 0
+
+        self.head = 'C\x02\0\0\nfolder: ' + folder + '\nfileoverride\n' + \
+                    'header: ' + header + '\n\n'
+        self.body = 'tech=i-t\nei=' + str(Estep) + '\nst=' + str(ttot) + \
+                    '\nsi=' + str(dt) + '\nqt=' + str(qt) + \
+                    '\nsens=' + str(sens) 
+        if 'resistance' in kwargs: # In case IR compensation is required
+            resistance = kwargs.get('resistance')
+            self.body += '\nmir=' + str(resistance) + \
+                         '\nircompon'
+        if 'E2' and 'sens2' in kwargs:
+            E2 = kwargs.get('E2')
+            sens2 = kwargs.get('sens2')
+            self.body += '\ne2=' + str(E2) + '\nsens2=' + str(sens2) + \
+                         '\ne2on\ni2on'
+        else:
+            pass
+        runTurnOffSave = '\nrun\ne2off\ni2off\nircompoff\nsave:' + self.fileName + '\ntsave:' + self.fileName
+        text = self.body + runTurnOffSave
+        return text
+
+    def LSV(self, Eini, Efin, sr, dE, sens,
+            fileName, **kwargs):
+        self.fileName = fileName
+        if 'qt' in kwargs:
+            qt = kwargs.get('qt')
+        else:
+            qt = 2
+        if 'resistance' in kwargs:
+            resistance = kwargs.get('resistance')
+        else:
+            resistance = 0
+        
+        self.validate(Eini, Efin, sr, dE, sens)
+
+        self.head = 'C\x02\0\0\nfolder: ' + folder + '\nfileoverride\n' + \
+                    'header: ' + header + '\n\n'
+        self.body = 'tech=lsv\nei=' + str(Eini) + '\nef=' + str(Efin) + \
+                    '\nv=' + str(sr) + '\nsi=' + str(dE) + \
+                    '\nqt=' + str(qt) + '\nsens=' + str(sens) 
+        if resistance: # In case IR compensation is required
+            resistance = kwargs.get('resistance')
+            self.body += '\nmir=' + str(resistance) + \
+                         '\nircompon'
+        if 'E2' and 'sens2' in kwargs:
+            E2 = kwargs.get('E2')
+            sens2 = kwargs.get('sens2')
+            self.body += '\ne2=' + str(E2) + '\nsens2=' + str(sens2) + \
+                         '\ne2on\ni2on'
+        else:
+            pass
+        runTurnOffSave = '\nrun\ne2off\ni2off\nircompoff\nsave:' + self.fileName + '\ntsave:' + self.fileName
+        text = self.body + runTurnOffSave
+        return text
+
+    def OCP(self, ttot, dt,
+            fileName, *kwargs):
+        self.fileName = fileName
+        if 'qt' in kwargs:
+            qt = kwargs.get('qt')
+        else:
+            qt = 2
+        if 'resistance' in kwargs:
+            resistance = kwargs.get('resistance')
+        else:
+            resistance = 0 
+
+        self.head = 'C\x02\0\0\nfolder: ' + folder + '\nfileoverride\n' + \
+                    'header: ' + header + '\n\n'
+        self.body = 'tech=ocpt\nst=' + str(ttot) + '\neh=10' + \
+                    '\nel=-10' + '\nsi=' + str(dt) + '\nqt=' + str(qt) 
+        runTurnOffSave = '\nrun\ne2off\ni2off\nircompoff\nsave:' + self.fileName + '\ntsave:' + self.fileName
+        text = self.body + runTurnOffSave
+        return text
     
     def PSC(self, E1, dir, dist, sens, incrdist, incrtime,
             fileName, **kwargs):
