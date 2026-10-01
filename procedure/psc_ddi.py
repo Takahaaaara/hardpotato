@@ -19,16 +19,27 @@ secm.RUN()
 dist = 500
 secm.PSC(E1=0.4, sens=1e-8, qt=30, dir='x', dist=dist, incrdist=0.5, incrtime=0.05, fileName='PSC_X', header='PSC_test')
 secm.RUN()
+
 xd = []
+xi = []
 xdata = hp.load_data.PSC('PSC_X' + '.txt', str(folder), model)
 xi = xdata.i
 xi = np.array(xi)
 xdi = np.diff(xi)
 xddi = np.diff(xdi)
+xd_xddimax = xd[np.argmax(xddi)]
 
+
+print('xi Max:', np.max(xi))
+print('xdi Max:', np.max(xdi))
+print('xddi Max:', np.max(xddi))
+print('middle palattto:', xd_xddimax)
+
+import matplotlib.pyplot as plt
 fig, ax = plt.subplots(1, 3, figsize=(6, 10))
 ax[0].plot(xd, xi)
 ax[1].plot(xd, xdi)
 ax[2].plot(xd, xddi)
+ax[2].vline(xd_xddimax)
 
 plt.show()
