@@ -7,39 +7,51 @@ import matplotlib.pyplot as plt
 model = 'chi920d'
 path = 'C:/Users/parasita/Downloads/chi920d/chi920d.exe'
 date_str = datetime.now().strftime("%m%d%Y")
-folder= Path(f'data/data/{date_str}') # NOTE: verificar se isso funciona
+tech = 'PSC_ddi'
+folder= Path(f'data/data/{date_str}/{tech}') # NOTE: verificar se isso funciona
 Path.mkdir(folder, parents=True, exist_ok=True)
-# folder = f'data/data/{today}'
 
 hp.potentiostat.Setup(model, path, str(folder))
 secm = hp.potentiostat.SECM()
 
-secm.PAC(E1=0.4, qt = 30, sens=1e-8, maxincr=0.5, iratio=75, fileName='PAC', header='PAC_test', withdraw=100)
-secm.RUN()
+secm.MOVE(x=-300)
 dist = 500
-secm.PSC(E1=0.4, sens=1e-8, qt=30, dir='x', dist=dist, incrdist=0.5, incrtime=0.05, fileName='PSC_X', header='PSC_test')
-secm.RUN()
+secm.PSC(E1=0.4, sens=1e-9, qt=30, dir='x', dist=dist, incrdist=0.5, incrtime=0.05, fileName='PSC_X', header='PSC_test')
+# secm.RUN()
 
 xd = []
 xi = []
 xdata = hp.load_data.PSC('PSC_X' + '.txt', str(folder), model)
+xd = xdata.d
 xi = xdata.i
 xi = np.array(xi)
 xdi = np.diff(xi)
 xddi = np.diff(xdi)
 xd_xddimax = xd[np.argmax(xddi)]
 
+max_xdi = xdi.max()
+min_xdi = xdi.min()
 
-print('xi Max:', np.max(xi))
-print('xdi Max:', np.max(xdi))
-print('xddi Max:', np.max(xddi))
-print('middle palattto:', xd_xddimax)
+xd_max_xdi = xd[np.argmax(xdi)]
+xd_min_xdi = xd[np.argmin(xdi)]
 
-import matplotlib.pyplot as plt
-fig, ax = plt.subplots(1, 3, figsize=(6, 10))
+plateau = (xd_max_xdi - xd_min_xdi)/2 + xd_min_xdi
+
+print('x at di Min:', xd_min_xdi)
+
+print('x at di Max:', xd_max_xdi)
+
+
+
+fig, ax = plt.subplots(2, 1, figsize=(12, 6))
 ax[0].plot(xd, xi)
+xd = xd[1:]
 ax[1].plot(xd, xdi)
-ax[2].plot(xd, xddi)
-ax[2].vline(xd_xddimax)
+
+ax[0].axvline(x=xd_max_xdi)
+ax[0].axvline(x=xd_min_xdi)
+ax[0].axvline(x=plateau, color='r')
+
+
 
 plt.show()

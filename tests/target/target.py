@@ -15,10 +15,10 @@ y_position = 0
 print('X position:', x_position)
 print('Y position:', y_position)
 secm.PAC(E1=0.4, qt = 30, sens=1e-8, maxincr=0.5, iratio=75, fileName='PAC', header='PAC_test', withdraw=100)
-#secm.RUN()
+secm.RUN()
 dist = 500
 secm.PSC(E1=0.4, sens=1e-8, qt=30, dir='x', dist=dist, incrdist=0.5, incrtime=0.05, fileName='PSC_X', header='PSC_test')
-#secm.RUN()
+secm.RUN()
 x_position = x_position + dist
 print('X position:', x_position)
 print('Y position:', y_position)
