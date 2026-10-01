@@ -547,7 +547,7 @@ class SECM(Technique):
          path_lib,
          f'/runmacro:{folder_save}/{self.fileName}.mcr'
         ]
-        subprocess.run(command)
+        # subprocess.run(command)
 
         self.moveText = '' 
         self.techText = ''
