@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 model = 'chi920d'
 path = 'C:/Users/parasita/Downloads/chi920d/chi920d.exe'
 date_str = datetime.now().strftime("%m%d%Y")
-tech = 'PSC_algiment_5'
+tech = 'PSC_algiment_with_SECM'
 folder= Path(f'data/data/{date_str}/{tech}') 
 Path.mkdir(folder, parents=True, exist_ok=True)
 
@@ -22,7 +22,7 @@ print('Y position:', y_position)
 
 dist = 500
 secm.PSC(E1=0.4, sens=1e-9, qt=30, dir='x', dist=dist, incrdist=0.25, incrtime=0.05, fileName='PSC_X', header='PSC_test')
-secm.RUN()
+#secm.RUN()
 x_position = x_position + dist
 print('X position:', x_position)
 print('Y position:', y_position)
@@ -53,7 +53,7 @@ print('X position:', x_position)
 print('Y position:', y_position)
 dist = 500
 secm.PSC(E1=0.4, sens=1e-9, qt=30, dir='y', dist=dist, incrdist=0.25, incrtime=0.05, fileName='PSC_y', header='PSC_test')
-secm.RUN()
+# secm.RUN()
 y_position = y_position + dist
 print('X position:', x_position)
 print('Y position:', y_position)
@@ -76,12 +76,12 @@ yd_min_ydi = yd[np.argmin(ydi)]
 
 y_plateau = (yd_max_ydi - yd_min_ydi)/2 + yd_min_ydi
 
-secm.MOVE(y=y_plateau - y_position)
+secm.MOVE(x=-125, y=(y_plateau - y_position)+125)
 y_position = y_position + (y_plateau - y_position)
 print('X position:', x_position)
 print('Y position:', y_position)
-secm.CV(Eini=0, Ev1=0.8, Ev2=0, Efin=0, sr=0.1, sens=1e-8, fileName='CV_maxi')
-secm.RUN()
+secm.SECM(E1=0.4, sens=1e-9, xdist=250, ydist=250, incrdist=0.5, incrtime=0.5, fileName='SECM_final')
+# secm.RUN()
 
 fig, ax = plt.subplots(2, 2, figsize=(12, 6))
 ax = ax.flatten()
@@ -89,17 +89,22 @@ ax = ax.flatten()
 ax[0].plot(xd, xi)
 xd = xd[1:]
 ax[1].plot(xd, xdi)
+ax[1].set_title('PSC X [di, x]')
 
 ax[0].axvline(x=xd_max_xdi)
 ax[0].axvline(x=xd_min_xdi)
 ax[0].axvline(x=x_plateau, color='r')
+ax[0].set_title('PSC X')
 
 ax[2].plot(yd, yi)
 yd = yd[1:]
 ax[3].plot(yd, ydi)
+ax[3].set_title('PSC y [di, y]')
 
 ax[2].axvline(x=yd_max_ydi)
 ax[2].axvline(x=yd_min_ydi)
 ax[2].axvline(x=y_plateau, color='r')
+ax[2].set_title('PSC Y')
 
+plt.tight_layout()
 plt.show()
