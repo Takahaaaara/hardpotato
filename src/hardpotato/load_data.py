@@ -15,7 +15,7 @@ class Read:
         self.file_path = self.folder + "/" + self.fileName
 
     def read(self, text=0, model=0):
-        self.delimiter = ","
+        self.delimiter = ", "
         if model == "chi920d":
             self.skiprows = self.search(text)
             if self.skiprows:
@@ -202,7 +202,7 @@ class SECM(Read):
         self.folder = folder
         text = 'X/um'
         Read.__init__(self)
-        self.delimiter = ","
+        self.delimiter = ", "
         self.skiprows = self.search(text) + 1 # for some reason the chi software add a ' ' (space) between the header and data in SECN mode
         if self.skiprows:
             self.data = np.loadtxt(

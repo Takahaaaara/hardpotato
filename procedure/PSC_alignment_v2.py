@@ -7,9 +7,12 @@ import matplotlib.pyplot as plt
 model = 'chi920d'
 path = 'C:/Users/parasita/Downloads/chi920d/chi920d.exe'
 date_str = datetime.now().strftime("%m%d%Y")
-tech = 'PSC_algiment_with_SECM'
+tech = 'PSC_algiment_with_SECM_5'
 folder= Path(f'data/data/{date_str}/{tech}') 
 Path.mkdir(folder, parents=True, exist_ok=True)
+
+E1 = 0.4
+sesns1 = 1e-9
 
 hp.potentiostat.Setup(model, path, str(folder))
 secm = hp.potentiostat.SECM()
@@ -21,8 +24,8 @@ print('Y position:', y_position)
 
 
 dist = 500
-secm.PSC(E1=0.4, sens=1e-9, qt=30, dir='x', dist=dist, incrdist=0.25, incrtime=0.05, fileName='PSC_X', header='PSC_test')
-#secm.RUN()
+secm.PSC(E1=E1, sens=sesns1, qt=30, dir='x', dist=dist, incrdist=0.25, incrtime=0.05, fileName='PSC_X', header='PSC_test')
+secm.RUN()
 x_position = x_position + dist
 print('X position:', x_position)
 print('Y position:', y_position)
@@ -52,8 +55,8 @@ y_position = y_position -300
 print('X position:', x_position)
 print('Y position:', y_position)
 dist = 500
-secm.PSC(E1=0.4, sens=1e-9, qt=30, dir='y', dist=dist, incrdist=0.25, incrtime=0.05, fileName='PSC_y', header='PSC_test')
-# secm.RUN()
+secm.PSC(E1=E1, sens=sesns1, qt=30, dir='y', dist=dist, incrdist=0.25, incrtime=0.05, fileName='PSC_y', header='PSC_test')
+secm.RUN()
 y_position = y_position + dist
 print('X position:', x_position)
 print('Y position:', y_position)
@@ -76,12 +79,14 @@ yd_min_ydi = yd[np.argmin(ydi)]
 
 y_plateau = (yd_max_ydi - yd_min_ydi)/2 + yd_min_ydi
 
-secm.MOVE(x=-125, y=(y_plateau - y_position)+125)
+# secm.MOVE(x=-125, y=(y_plateau - y_position)+125)
+secm.MOVE(y=(y_plateau - y_position))
 y_position = y_position + (y_plateau - y_position)
 print('X position:', x_position)
 print('Y position:', y_position)
-secm.SECM(E1=0.4, sens=1e-9, xdist=250, ydist=250, incrdist=0.5, incrtime=0.5, fileName='SECM_final')
-# secm.RUN()
+# secm.SECM(E1=E1, sens=sesns1, xdist=250, ydist=-250, incrdist=2, incrtime=0.01, fileName='SECM_final')
+secm.CV(Eini=0, Ev1=0, Ev2=0.4, Efin=0.4, sens=1e-9, nSweeps=4)
+secm.RUN()
 
 fig, ax = plt.subplots(2, 2, figsize=(12, 6))
 ax = ax.flatten()
