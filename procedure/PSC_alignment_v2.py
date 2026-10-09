@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 model = 'chi920d'
 path = 'C:/Users/parasita/Downloads/chi920d/chi920d.exe'
 date_str = datetime.now().strftime("%m%d%Y")
-tech = 'PSC_algiment_with_SECM_5'
+tech = 'PSC_algiment_with_SECM'
 folder= Path(f'data/data/{date_str}/{tech}') 
 Path.mkdir(folder, parents=True, exist_ok=True)
 
@@ -79,13 +79,13 @@ yd_min_ydi = yd[np.argmin(ydi)]
 
 y_plateau = (yd_max_ydi - yd_min_ydi)/2 + yd_min_ydi
 
-# secm.MOVE(x=-125, y=(y_plateau - y_position)+125)
-secm.MOVE(y=(y_plateau - y_position))
+secm.MOVE(x=-125, y=(y_plateau - y_position)+125)
+# secm.MOVE(y=(y_plateau - y_position))
 y_position = y_position + (y_plateau - y_position)
 print('X position:', x_position)
 print('Y position:', y_position)
-# secm.SECM(E1=E1, sens=sesns1, xdist=250, ydist=-250, incrdist=2, incrtime=0.01, fileName='SECM_final')
-secm.CV(Eini=0, Ev1=0, Ev2=0.4, Efin=0.4, sens=1e-9, nSweeps=4)
+secm.SECM(E1=E1, sens=sesns1, xdist=250, ydist=-250, incrdist=2, incrtime=0.01, fileName='SECM_final')
+# secm.CV(Eini=0, Ev1=0, Ev2=0.4, Efin=0.4, sens=1e-9, nSweeps=4, E2=0.4, sens2=1e-8)
 secm.RUN()
 
 fig, ax = plt.subplots(2, 2, figsize=(12, 6))
