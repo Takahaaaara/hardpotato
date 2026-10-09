@@ -2,7 +2,7 @@ import hardpotato as hp
 import numpy as np
 import matplotlib.pyplot as plt
 
-folder = 'data/data/10072026/PSC_algiment_with_SECM'
+folder = r'data\data\10092026\PSC_algiment_with_SECM'
 model = 'chi920d'
             
 secm = hp.load_data.SECM('SECM_final' +'.txt', folder, model)
