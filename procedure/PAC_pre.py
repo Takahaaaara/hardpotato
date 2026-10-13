@@ -15,5 +15,5 @@ Path.mkdir(folder, parents=True, exist_ok=True)
 hp.potentiostat.Setup(model, path, str(folder))
 secm = hp.potentiostat.SECM()
 
-secm.PAC(E1=0.4, qt = 30, sens=1e-8, maxincr=0.05, iratio=50, fileName='PAC', header='PAC_pre', withdraw=150)
+secm.PAC(E1=0.4, qt = 30, sens=1e-9, maxincr=0.1, iratio=55, fileName='PAC', header='PAC_pre', withdraw=150)
 secm.RUN()

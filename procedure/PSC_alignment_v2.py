@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 model = 'chi920d'
 path = 'C:/Users/parasita/Downloads/chi920d/chi920d.exe'
 date_str = datetime.now().strftime("%m%d%Y")
-tech = 'PSC_algiment_with_SECM'
+tech = 'PSC_algiment_with_secm_5'
 folder= Path(f'data/data/{date_str}/{tech}') 
 Path.mkdir(folder, parents=True, exist_ok=True)
 
@@ -24,7 +24,7 @@ print('Y position:', y_position)
 
 
 dist = 500
-secm.PSC(E1=E1, sens=sesns1, qt=30, dir='x', dist=dist, incrdist=0.25, incrtime=0.05, fileName='PSC_X', header='PSC_test')
+secm.PSC(E2=0, sens2=1e-6,E1=E1, sens=sesns1, qt=30, dir='x', dist=dist, incrdist=0.5, incrtime=0.05, fileName='PSC_X', header='PSC_test')
 secm.RUN()
 x_position = x_position + dist
 print('X position:', x_position)
@@ -37,8 +37,6 @@ xd = xdata.d
 xi = xdata.i
 xi = np.array(xi)
 xdi = np.diff(xi)
-xddi = np.diff(xdi)
-xd_xddimax = xd[np.argmax(xddi)]
 
 max_xdi = xdi.max()
 min_xdi = xdi.min()
@@ -49,15 +47,15 @@ xd_min_xdi = xd[np.argmin(xdi)]
 x_plateau = (xd_max_xdi - xd_min_xdi)/2 + xd_min_xdi
 
 
-secm.MOVE(x=x_plateau - x_position, y=-300)
+secm.MOVE(x=x_plateau - x_position, y=-250)
 x_position = x_position + (x_plateau - x_position)
-y_position = y_position -300
+y_position = y_position -250
 print('X position:', x_position)
 print('Y position:', y_position)
 dist = 500
-secm.PSC(E1=E1, sens=sesns1, qt=30, dir='y', dist=dist, incrdist=0.25, incrtime=0.05, fileName='PSC_y', header='PSC_test')
+secm.PSC(E2=0, sens2=1e-6,E1=E1, sens=sesns1, qt=30, dir='y', dist=dist, incrdist=0.5, incrtime=0.05, fileName='PSC_y', header='PSC_test')
 secm.RUN()
-y_position = y_position + dist
+y_position = y_position + dist + 250
 print('X position:', x_position)
 print('Y position:', y_position)
 
@@ -68,8 +66,7 @@ yd = ydata.d
 yi = ydata.i
 yi = np.array(yi)
 ydi = np.diff(yi)
-yddi = np.diff(ydi)
-yd_yddimax = yd[np.argmax(yddi)]
+
 
 max_ydi = ydi.max()
 min_ydi = ydi.min()
@@ -79,12 +76,16 @@ yd_min_ydi = yd[np.argmin(ydi)]
 
 y_plateau = (yd_max_ydi - yd_min_ydi)/2 + yd_min_ydi
 
-secm.MOVE(x=-125, y=(y_plateau - y_position)+125)
+
+secm.MOVE(x=-125, y=y_plateau - y_position+125)
+#secm.MOVE(y=(y_plateau - y_position), z=-150)
 # secm.MOVE(y=(y_plateau - y_position))
 y_position = y_position + (y_plateau - y_position)
+x_position = x_position - 125
 print('X position:', x_position)
 print('Y position:', y_position)
-secm.SECM(E1=E1, sens=sesns1, xdist=250, ydist=-250, incrdist=2, incrtime=0.01, fileName='SECM_final')
+#secm.PAC(E2=0, sens2=1e-6,E1=E1, iratio=150, sens=1e-9)
+secm.SECM(E2=0, sens2=1e-6, E1=E1, sens=sesns1, xdist=250, ydist=-250, incrdist=2, incrtime=0.01, fileName='SECM_final')
 # secm.CV(Eini=0, Ev1=0, Ev2=0.4, Efin=0.4, sens=1e-9, nSweeps=4, E2=0.4, sens2=1e-8)
 secm.RUN()
 

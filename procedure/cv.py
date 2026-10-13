@@ -14,19 +14,19 @@ info = potentiostat.Info(model)
 info.specifications()
 
 Eini = 0     # V, initial potential
-Ev1 = -0.2       # V, first vertex potential
-Ev2 = 0.4      # V, second vertex potential
-Efin = 0.4     # V, final potential
-sr = 0.1        # V/s, scan rate
+Ev1 = 0       # V, first vertex potential
+Ev2 = 0.6      # V, second vertex potential
+Efin = 0.6     # V, final potential
+sr = 0.2        # V/s, scan rate
 dE = 0.001      # V, potential increment
-nSweeps = 4     # number of sweeps
-sens = 1e-8     # A/V, current sensitivity
-fileName = '10012026_UME5_Pre_CV_FcMeOH1mM' # base file name for data file
+nSweeps = 5     # number of sweeps
+sens = 1e-9     # A/V, current sensitivity
+fileName = '10012026_UME6_Pre_CV_FcMeOH1mM' # base file name for data file
 header = 'CV'   # header for data file
 
 potentiostat.Setup(model, path, str(folder))
 secm = potentiostat.SECM()
 
-
+secm.MOVE(z=-100)
 secm.CV(Eini, Ev1,Ev2, Efin, sr, dE, nSweeps, sens, fileName, header)
 secm.RUN()
